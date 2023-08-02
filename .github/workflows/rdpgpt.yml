@@ -13,7 +13,7 @@ jobs:
       run: |
         reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
         netsh advfirewall firewall add rule name="Allow RDP" dir=in action=allow protocol=TCP localport=3389
-        net user Server Server3389 /add
+        net user Server RDPServer3389P /add
         net localgroup administrators Username /add
 
     - name: RDP Has Been Started
@@ -21,7 +21,7 @@ jobs:
           echo "Public IP: $(curl -s https://api.ipify.org)"
           echo "Connect to Port: 3389"
           echo "Username: Server"
-          echo "Password: Server3389"
+          echo "Password: RDPServer3389P"
     
     - name: RDP Running Time
       run: |
