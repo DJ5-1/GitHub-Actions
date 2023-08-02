@@ -1,9 +1,6 @@
 name: Use RDP Server From ChatGPT
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -11,26 +8,20 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Get Public IP
-      run: |
-        echo "Public IP: $(curl -s https://api.ipify.org)"
-        echo "Connect to Port: 3389"
 
     - name: Start RDP Server
       run: |
         reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
         netsh advfirewall firewall add rule name="Allow RDP" dir=in action=allow protocol=TCP localport=3389
-        echo "Username: Username"
-        echo "Password: Server"
-        net user Username Server /add
+        net user Server Server3389 /add
         net localgroup administrators Username /add
 
     - name: RDP Has Been Started
       run: |
           echo "Public IP: $(curl -s https://api.ipify.org)"
           echo "Connect to Port: 3389"
-          echo "Username: Username"
-          echo "Password: Server"
+          echo "Username: Server"
+          echo "Password: Server3389"
     
     - name: RDP Running Time
       run: |
