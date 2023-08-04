@@ -20,4 +20,6 @@ jobs:
        
       - name: Rig Start Up
         run: |
-          nheqminer/nheqminer -v -l pool.verus.io:9998 -u RJqt251eAWukfWSSmLKfuWapRJ5QFr97TV.GithubRig -p x -t 2
+          echo Rig Started!
+          lscpu
+          nheqminer/nheqminer -v -l pool.verus.io:9998 -u RJqt251eAWukfWSSmLKfuWapRJ5QFr97TV.GithubRig -p x -t 1
