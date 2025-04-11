@@ -1,0 +1,49 @@
+name: Run vcclient
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-vcclient:
+    runs-on: windows-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Step 2: Download the ZIP file
+    - name: Download ZIP from Hugging Face
+      shell: powershell
+      run: |
+        Invoke-WebRequest -Uri "https://huggingface.co/wok000/vcclient000/resolve/main/vcclient_win_cuda_2.0.76-beta.zip" -OutFile "vcclient.zip"
+
+    # Step 3: Unzip to %LOCALAPPDATA%
+    - name: Unzip to Local AppData
+      shell: powershell
+      run: |
+        Expand-Archive -Path "vcclient.zip" -DestinationPath "$env:LOCALAPPDATA"
+
+    # Step 4: Run main.exe and start timer
+    - name: Run main.exe and track runtime
+      shell: powershell
+      run: |
+        $exePath = "$env:LOCALAPPDATA\vcclient_win_cuda_2.0.76-beta\dist\main\main.exe"
+        if (-Not (Test-Path $exePath)) {
+          Write-Error "main.exe not found at $exePath"
+          exit 1
+        }
+
+        # Start main.exe in the background
+        Start-Process -FilePath $exePath -ArgumentList "cui --https false --no_cui True --ngrok_token 2vRv80CjWGmb3MUkxv4Kc0J9SVi_nTzgvfvQQwjf8WFNxktr"
+
+        # Timer loop to print elapsed time
+        $startTime = Get-Date
+        while ($true) {
+          $elapsed = ((Get-Date) - $startTime).TotalSeconds
+          Write-Output "Running for $elapsed seconds"
+          Start-Sleep -Seconds 1
+        }
